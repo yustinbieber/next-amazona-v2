@@ -66,7 +66,7 @@ const Menu = () => {
           </i>
           <li>
             <Link className="btn btn-ghost rounded-btn" href="/cart">
-              Cart
+              Carrito
               {mounted && items.length != 0 && (
                 <div className="badge badge-secondary">
                   {items.reduce((a, c) => a + c.qty, 0)}{' '}
@@ -106,14 +106,14 @@ const Menu = () => {
                     )}
 
                     <li onClick={handleClick}>
-                      <Link href="/order-history">Order history </Link>
+                      <Link href="/order-history">Historial de ordenes</Link>
                     </li>
                     <li onClick={handleClick}>
-                      <Link href="/profile">Profile</Link>
+                      <Link href="/profile">Perfil</Link>
                     </li>
                     <li onClick={handleClick}>
                       <button type="button" onClick={signoutHandler}>
-                        Sign out
+                        Cerrar sesion
                       </button>
                     </li>
                   </ul>

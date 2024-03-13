@@ -17,6 +17,7 @@ const Form = () => {
   } = useForm<ShippingAddress>({
     defaultValues: {
       fullName: '',
+      email: '',
       address: '',
       city: '',
       postalCode: '',
@@ -30,6 +31,7 @@ const Form = () => {
     setValue('city', shippingAddress.city)
     setValue('postalCode', shippingAddress.postalCode)
     setValue('country', shippingAddress.country)
+    setValue('email', shippingAddress.email)
   }, [setValue, shippingAddress])
 
   const formSubmit: SubmitHandler<ShippingAddress> = async (form) => {
@@ -72,13 +74,14 @@ const Form = () => {
       <CheckoutSteps current={1} />
       <div className="max-w-sm mx-auto card bg-base-300 my-4">
         <div className="card-body">
-          <h1 className="card-title">Shipping Address</h1>
+          <h1 className="card-title">Dirección de envío</h1>
           <form onSubmit={handleSubmit(formSubmit)}>
-            <FormInput name="Full Name" id="fullName" required />
-            <FormInput name="Address" id="address" required />
-            <FormInput name="City" id="city" required />
-            <FormInput name="Postal Code" id="postalCode" required />
-            <FormInput name="Country" id="country" required />
+            <FormInput name="Nombre completo" id="fullName" required />
+            <FormInput name="Correo electronico" id="email" required />
+            <FormInput name="Direccion" id="address" required />
+            <FormInput name="Ciudad" id="city" required />
+            <FormInput name="Codigo postal" id="postalCode" required />
+            <FormInput name="País" id="country" required />
             <div className="my-2">
               <button
                 type="submit"

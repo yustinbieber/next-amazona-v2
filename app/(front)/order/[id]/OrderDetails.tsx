@@ -68,8 +68,6 @@ export default function OrderDetails({
     shippingAddress,
     items,
     itemsPrice,
-    taxPrice,
-    shippingPrice,
     totalPrice,
     isDelivered,
     deliveredAt,
@@ -86,6 +84,7 @@ export default function OrderDetails({
             <div className="card-body">
               <h2 className="card-title">Shipping Address</h2>
               <p>{shippingAddress.fullName}</p>
+              <p>{shippingAddress.email}</p>
               <p>
                 {shippingAddress.address}, {shippingAddress.city},{' '}
                 {shippingAddress.postalCode}, {shippingAddress.country}{' '}
@@ -159,18 +158,6 @@ export default function OrderDetails({
                   <div className="mb-2 flex justify-between">
                     <div>Items</div>
                     <div>${itemsPrice}</div>
-                  </div>
-                </li>
-                <li>
-                  <div className="mb-2 flex justify-between">
-                    <div>Tax</div>
-                    <div>${taxPrice}</div>
-                  </div>
-                </li>
-                <li>
-                  <div className="mb-2 flex justify-between">
-                    <div>Shipping</div>
-                    <div>${shippingPrice}</div>
                   </div>
                 </li>
                 <li>

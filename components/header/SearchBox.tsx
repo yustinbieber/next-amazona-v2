@@ -20,18 +20,18 @@ export const SearchBox = () => {
           defaultValue={category}
           className="join-item select select-bordered "
         >
-          <option value="all">All</option>
+          <option value="all">Todo</option>
           {categories.map((c: string) => (
             <option key={c}>{c}</option>
           ))}
         </select>
         <input
           className="join-item input input-bordered  w-48"
-          placeholder="Search"
+          placeholder="Buscar"
           defaultValue={q}
           name="q"
         />
-        <button className="join-item btn">Search</button>
+        <button className="join-item btn">Buscar</button>
       </div>
     </form>
   )

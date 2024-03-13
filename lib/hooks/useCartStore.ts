@@ -6,8 +6,6 @@ import { persist } from 'zustand/middleware'
 type Cart = {
   items: OrderItem[]
   itemsPrice: number
-  taxPrice: number
-  shippingPrice: number
   totalPrice: number
 
   paymentMethod: string
@@ -16,12 +14,11 @@ type Cart = {
 const initialState: Cart = {
   items: [],
   itemsPrice: 0,
-  taxPrice: 0,
-  shippingPrice: 0,
   totalPrice: 0,
   paymentMethod: 'PayPal',
   shippingAddress: {
     fullName: '',
+    email: '',
     address: '',
     city: '',
     postalCode: '',
@@ -39,8 +36,6 @@ export default function useCartService() {
   const {
     items,
     itemsPrice,
-    taxPrice,
-    shippingPrice,
     totalPrice,
     paymentMethod,
     shippingAddress,
@@ -48,8 +43,6 @@ export default function useCartService() {
   return {
     items,
     itemsPrice,
-    taxPrice,
-    shippingPrice,
     totalPrice,
     paymentMethod,
     shippingAddress,
@@ -65,8 +58,6 @@ export default function useCartService() {
       cartStore.setState({
         items: updatedCartItems,
         itemsPrice,
-        shippingPrice,
-        taxPrice,
         totalPrice,
       })
     },
@@ -82,8 +73,6 @@ export default function useCartService() {
       cartStore.setState({
         items: updatedCartItems,
         itemsPrice,
-        shippingPrice,
-        taxPrice,
         totalPrice,
       })
     },

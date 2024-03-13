@@ -15,11 +15,44 @@ const Form = () => {
     shippingAddress,
     items,
     itemsPrice,
-    taxPrice,
-    shippingPrice,
     totalPrice,
     clear,
   } = useCartService()
+
+  const { data: orderData, error: orderError } = useSWRMutation(
+    `/api/orders/mine`,
+    async (url) => {
+      const res = await fetch('/api/orders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          paymentMethod,
+          shippingAddress,
+          items,
+          itemsPrice,
+          totalPrice,
+        }),
+      })
+      const data = await res.json()
+      return data;
+    }
+  );
+
+  useEffect(() => {
+    const handlePlaceOrder = async () => {
+      if (orderData && !orderError) {
+        clear();
+        toast.success('Order placed successfully');
+        router.push(`/order/${orderData.order._id}`);
+      } else if (orderError) {
+        toast.error(orderError.message || 'Failed to place order');
+      }
+    };
+
+    handlePlaceOrder();
+  }, [orderData, orderError, clear, router]);
 
   const { trigger: placeOrder, isMutating: isPlacing } = useSWRMutation(
     `/api/orders/mine`,
@@ -34,8 +67,6 @@ const Form = () => {
           shippingAddress,
           items,
           itemsPrice,
-          taxPrice,
-          shippingPrice,
           totalPrice,
         }),
       })
@@ -156,18 +187,6 @@ const Form = () => {
                   <div className=" flex justify-between">
                     <div>Items</div>
                     <div>${itemsPrice}</div>
-                  </div>
-                </li>
-                <li>
-                  <div className=" flex justify-between">
-                    <div>Tax</div>
-                    <div>${taxPrice}</div>
-                  </div>
-                </li>
-                <li>
-                  <div className=" flex justify-between">
-                    <div>Shipping</div>
-                    <div>${shippingPrice}</div>
                   </div>
                 </li>
                 <li>
