@@ -4,6 +4,8 @@ export type User = {
   _id: string
   name: string
   email: string
+  altura: string
+  peso: number
   isAdmin: boolean
 }
 
@@ -19,6 +21,14 @@ const UserSchema = new mongoose.Schema(
       unique: true,
     },
     password: {
+      type: String,
+      required: true,
+    },
+    altura: {
+      type: String,
+      required: true,
+    },
+    peso: {
       type: String,
       required: true,
     },

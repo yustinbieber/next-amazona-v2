@@ -41,6 +41,8 @@ export default function UserEditForm({ userId }: { userId: string }) {
     if (!user) return
     setValue('name', user.name)
     setValue('email', user.email)
+    setValue('altura', user.altura)
+    setValue('peso', user.peso)
     setValue('isAdmin', user.isAdmin)
   }, [user, setValue])
 
@@ -90,6 +92,8 @@ export default function UserEditForm({ userId }: { userId: string }) {
         <form onSubmit={handleSubmit(formSubmit)}>
           <FormInput name="Name" id="name" required />
           <FormInput name="Email" id="email" required />
+          <FormInput name="Altura" id="altura" required />
+          <FormInput name="Peso" id="peso" required />
 
           <div className="md:flex my-3">
             <label className="label md:w-1/5" htmlFor="isAdmin">

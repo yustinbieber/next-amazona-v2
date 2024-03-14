@@ -12,7 +12,7 @@ type Inputs = {
   password: string
   confirmPassword: string
   altura: string
-  peso: string
+  peso: number
 }
 
 const Form = () => {
@@ -33,7 +33,7 @@ const Form = () => {
       password: '',
       confirmPassword: '',
       altura: '',
-      peso: ''
+      peso: 0
     },
   })
   useEffect(() => {
