@@ -11,6 +11,8 @@ type Inputs = {
   email: string
   password: string
   confirmPassword: string
+  altura: string
+  peso: string
 }
 
 const Form = () => {
@@ -30,6 +32,8 @@ const Form = () => {
       email: '',
       password: '',
       confirmPassword: '',
+      altura: '',
+      peso: ''
     },
   })
   useEffect(() => {
@@ -39,7 +43,7 @@ const Form = () => {
   }, [callbackUrl, params, router, session])
 
   const formSubmit: SubmitHandler<Inputs> = async (form) => {
-    const { name, email, password } = form
+    const { name, email, password, altura, peso } = form
 
     try {
       const res = await fetch('/api/auth/register', {
@@ -51,6 +55,8 @@ const Form = () => {
           name,
           email,
           password,
+          altura,
+          peso,
         }),
       })
       if (res.ok) {
@@ -144,6 +150,38 @@ const Form = () => {
             />
             {errors.confirmPassword?.message && (
               <div className="text-error">{errors.confirmPassword.message}</div>
+            )}
+          </div>
+          <div className="my-2">
+            <label className="label" htmlFor="altura">
+              Altura
+            </label>
+            <input
+              type="text"
+              id="altura"
+              {...register('altura', {
+                required: 'Altura is required',
+              })}
+              className="input input-bordered w-full max-w-sm"
+            />
+            {errors.name?.message && (
+              <div className="text-error">{errors.name.message}</div>
+            )}
+          </div>
+          <div className="my-2">
+            <label className="label" htmlFor="peso">
+              Peso
+            </label>
+            <input
+              type="text"
+              id="peso"
+              {...register('peso', {
+                required: 'Peso is required',
+              })}
+              className="input input-bordered w-full max-w-sm"
+            />
+            {errors.name?.message && (
+              <div className="text-error">{errors.name.message}</div>
             )}
           </div>
           <div className="my-2">
