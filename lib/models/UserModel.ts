@@ -1,10 +1,10 @@
-import mongoose from 'mongoose'
+import mongoose, { WindowOperatorReturningNumber } from 'mongoose'
 
 export type User = {
   _id: string
   name: string
   email: string
-  altura: string
+  altura: number
   peso: number
   isAdmin: boolean
 }
@@ -25,11 +25,11 @@ const UserSchema = new mongoose.Schema(
       required: true,
     },
     altura: {
-      type: String,
+      type: Number,
       required: true,
     },
     peso: {
-      type: String,
+      type: Number,
       required: true,
     },
     isAdmin: { type: Boolean, required: true, default: false },

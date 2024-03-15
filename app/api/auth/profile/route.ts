@@ -8,8 +8,7 @@ export const PUT = auth(async (req) => {
     return Response.json({ message: 'Not authenticated' }, { status: 401 })
   }
   const { user } = req.auth
-  const { altura, peso } = req.auth
-  const { name, email, password } = await req.json()
+  const { name, email, altura, peso, password } = await req.json()
   await dbConnect()
   try {
     const dbUser = await UserModel.findById(user._id)

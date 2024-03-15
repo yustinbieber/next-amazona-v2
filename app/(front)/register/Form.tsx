@@ -11,7 +11,7 @@ type Inputs = {
   email: string
   password: string
   confirmPassword: string
-  altura: string
+  altura: number
   peso: number
 }
 
@@ -32,7 +32,7 @@ const Form = () => {
       email: '',
       password: '',
       confirmPassword: '',
-      altura: '',
+      altura: 0,
       peso: 0
     },
   })
