@@ -7,7 +7,6 @@ type Cart = {
   items: OrderItem[]
   itemsPrice: number
   totalPrice: number
-
   paymentMethod: string
   shippingAddress: ShippingAddress
 }
@@ -15,7 +14,7 @@ const initialState: Cart = {
   items: [],
   itemsPrice: 0,
   totalPrice: 0,
-  paymentMethod: 'PayPal',
+  paymentMethod: '',
   shippingAddress: {
     fullName: '',
     email: '',

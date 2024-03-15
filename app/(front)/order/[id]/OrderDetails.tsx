@@ -1,13 +1,13 @@
 // pages/orderdetails.tsx
 
 import { PayPalButtons, PayPalScriptProvider } from '@paypal/react-paypal-js';
-import useSWR from 'swr';
-import { useState } from 'react';
+import { useState } from 'react'; // Importa useState
 import { OrderItem } from '@/lib/models/OrderModel';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
+import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
 import { createMercadoPagoOrder } from '@/lib/mercadopago';
 
