@@ -42,9 +42,9 @@ export default function Users() {
             <tr>
               <th>id</th>
               <th>name</th>
+              <th>email</th>
               <th>altura</th>
               <th>peso</th>
-              <th>email</th>
               <th>admin</th>
               <th>actions</th>
             </tr>
