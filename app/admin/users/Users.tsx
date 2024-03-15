@@ -42,6 +42,8 @@ export default function Users() {
             <tr>
               <th>id</th>
               <th>name</th>
+              <th>altura</th>
+              <th>peso</th>
               <th>email</th>
               <th>admin</th>
               <th>actions</th>
@@ -53,6 +55,8 @@ export default function Users() {
                 <td>{formatId(user._id)}</td>
                 <td>{user.name}</td>
                 <td>{user.email}</td>
+                <td>{user.altura}</td>
+                <td>{user.peso}</td>
                 <td>{user.isAdmin ? 'YES' : 'NO'}</td>
 
                 <td>
