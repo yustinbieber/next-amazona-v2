@@ -1,11 +1,23 @@
-const express = require('express');
-const router = express.Router();
-const { createMercadoPagoOrder, captureMercadoPagoOrder } = require('@/lib/mercadopago');
+// api/orders/[id]/create-mercadopago-order.ts
 
-// Ruta para crear una orden de pago de Mercado Pago
-router.post('/api/orders/:id/create-mercadopago-order', createMercadoPagoOrder);
+import dbConnect from '@/lib/dbConnect';
+import OrderModel from '@/lib/models/OrderModel';
+import { createMercadoPagoOrder } from '@/lib/mercadopago';
 
-// Ruta para capturar un pago de Mercado Pago
-router.post('/api/orders/:id/capture-mercadopago-order', captureMercadoPagoOrder);
+export const POST = async (req: { query: { id: any; }; }, res: { status: (arg0: number) => { (): any; new(): any; json: { (arg0: { message: any; }): any; new(): any; }; }; }) => {
+  await dbConnect();
 
-module.exports = router;
+  const { id } = req.query;
+
+  try {
+    const order = await OrderModel.findById(id);
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
+
+    const mercadoPagoOrder = await createMercadoPagoOrder(order.totalPrice);
+    return res.status(200).json(mercadoPagoOrder);
+  } catch (error: any) {
+    return res.status(500).json({ message: error.message });
+  }
+};

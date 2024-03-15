@@ -1,12 +1,15 @@
-import { PayPalButtons, PayPalScriptProvider } from '@paypal/react-paypal-js'
-import { useState } from 'react'; // Importa useState
-import { OrderItem } from '@/lib/models/OrderModel'
-import { useSession } from 'next-auth/react'
-import Image from 'next/image'
-import Link from 'next/link'
-import toast from 'react-hot-toast'
-import useSWR from 'swr'
-import useSWRMutation from 'swr/mutation'
+// pages/orderdetails.tsx
+
+import { PayPalButtons, PayPalScriptProvider } from '@paypal/react-paypal-js';
+import useSWR from 'swr';
+import { useState } from 'react';
+import { OrderItem } from '@/lib/models/OrderModel';
+import { useSession } from 'next-auth/react';
+import Image from 'next/image';
+import Link from 'next/link';
+import toast from 'react-hot-toast';
+import useSWRMutation from 'swr/mutation';
+import { createMercadoPagoOrder } from '@/lib/mercadopago';
 
 interface OrderDetailsProps {
   orderId: string;
@@ -23,16 +26,16 @@ export default function OrderDetails({ orderId, paypalClientId, mercadoPagoClien
         headers: {
           'Content-Type': 'application/json',
         },
-      })
-      const data = await res.json()
+      });
+      const data = await res.json();
       res.ok
         ? toast.success('Order delivered successfully')
-        : toast.error(data.message)
+        : toast.error(data.message);
     }
-  )
+  );
 
-  const { data: session } = useSession()
-  console.log(session)
+  const { data: session } = useSession();
+  console.log(session);
   function createPayPalOrder() {
     return fetch(`/api/orders/${orderId}/create-paypal-order`, {
       method: 'POST',
@@ -41,7 +44,7 @@ export default function OrderDetails({ orderId, paypalClientId, mercadoPagoClien
       },
     })
       .then((response) => response.json())
-      .then((order) => order.id)
+      .then((order) => order.id);
   }
 
   function onApprovePayPalOrder(data: any) {
@@ -54,16 +57,16 @@ export default function OrderDetails({ orderId, paypalClientId, mercadoPagoClien
     })
       .then((response) => response.json())
       .then((orderData) => {
-        toast.success('Order paid successfully')
-      })
+        toast.success('Order paid successfully');
+      });
   }
 
   const [paymentUrl, setPaymentUrl] = useState(""); // Declaración de setPaymentUrl
 
-  const { data, error } = useSWR(`/api/orders/${orderId}`)
+  const { data, error } = useSWR(`/api/orders/${orderId}`);
 
-  if (error) return error.message
-  if (!data) return 'Loading...'
+  if (error) return error.message;
+  if (!data) return 'Loading...';
 
   const {
     paymentMethod,
@@ -75,7 +78,7 @@ export default function OrderDetails({ orderId, paypalClientId, mercadoPagoClien
     deliveredAt,
     isPaid,
     paidAt,
-  } = data
+  } = data;
 
   return (
     <div>
@@ -181,11 +184,14 @@ export default function OrderDetails({ orderId, paypalClientId, mercadoPagoClien
                     </PayPalScriptProvider>
                   </li>
                 )}
-                {!isPaid && paymentMethod === 'MercadoPago' && (
+                {!isPaid && paymentMethod === 'Mercado Pago' && (
                   <li>
-                    <button onClick={() => setPaymentUrl('https://www.mercadopago.com.ar/checkout/v1/redirect?preference_id=${preference.preferenceId}')} className="btn w-full my-2">
-                      Pay with Mercado Pago
-                    </button>
+                    <form action={`/api/orders/${orderId}/capture-mercadopago-order`} method="post">
+                      <input type="hidden" name="mercadoPagoOrderId" value={paymentUrl} />
+                      <button type="submit" className="btn">
+                        Pay with Mercado Pago
+                      </button>
+                    </form>
                   </li>
                 )}
               </ul>
@@ -194,5 +200,5 @@ export default function OrderDetails({ orderId, paypalClientId, mercadoPagoClien
         </div>
       </div>
     </div>
-  )
+  );
 }
