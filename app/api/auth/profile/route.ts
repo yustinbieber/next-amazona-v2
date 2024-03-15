@@ -8,6 +8,7 @@ export const PUT = auth(async (req) => {
     return Response.json({ message: 'Not authenticated' }, { status: 401 })
   }
   const { user } = req.auth
+  const { altura, peso } = req.auth
   const { name, email, password } = await req.json()
   await dbConnect()
   try {
@@ -21,6 +22,8 @@ export const PUT = auth(async (req) => {
       )
     }
     dbUser.name = name
+    dbUser.altura = altura
+    dbUser.peso = peso
     dbUser.email = email
     dbUser.password = password
       ? await bcrypt.hash(password, 5)

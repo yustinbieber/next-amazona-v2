@@ -4,12 +4,14 @@ import dbConnect from '@/lib/dbConnect'
 import UserModel from '@/lib/models/UserModel'
 
 export const POST = async (request: NextRequest) => {
-  const { name, email, password } = await request.json()
+  const { name, email, password, altura, peso } = await request.json()
   await dbConnect()
   const hashedPassword = await bcrypt.hash(password, 5)
   const newUser = new UserModel({
     name,
     email,
+    altura,
+    peso,
     password: hashedPassword,
   })
   try {

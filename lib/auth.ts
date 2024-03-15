@@ -25,7 +25,13 @@ export const config = {
             user.password
           )
           if (isMatch) {
-            return user
+            // Una vez que el usuario se autentica correctamente, puedes agregar la propiedad altura al objeto de sesión
+            const sessionUser = {
+              ...user.toObject(),
+              altura: user.altura, // Asigna la altura del usuario a la propiedad altura del objeto de sesión
+              peso: user.peso 
+            };
+            return sessionUser;
           }
         }
         return null
@@ -44,6 +50,8 @@ export const config = {
           _id: user._id,
           email: user.email,
           name: user.name,
+          altura: user.altura,
+          peso: user.peso,
           isAdmin: user.isAdmin,
         }
       }
@@ -52,6 +60,8 @@ export const config = {
           ...token.user,
           email: session.user.email,
           name: session.user.name,
+          altura: session.user.altura,
+          peso: session.user.peso
         }
       }
       return token

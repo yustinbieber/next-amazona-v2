@@ -53,7 +53,7 @@ export default function useCartService() {
             x.slug === item.slug ? { ...exist, qty: exist.qty + 1 } : x
           )
         : [...items, { ...item, qty: 1 }]
-      const { itemsPrice, shippingPrice, taxPrice, totalPrice } =
+      const { itemsPrice, totalPrice } =
         calcPrice(updatedCartItems)
       cartStore.setState({
         items: updatedCartItems,
@@ -68,7 +68,7 @@ export default function useCartService() {
         exist.qty === 1
           ? items.filter((x: OrderItem) => x.slug !== item.slug)
           : items.map((x) => (item.slug ? { ...exist, qty: exist.qty - 1 } : x))
-      const { itemsPrice, shippingPrice, taxPrice, totalPrice } =
+      const { itemsPrice, totalPrice } =
         calcPrice(updatedCartItems)
       cartStore.setState({
         items: updatedCartItems,
@@ -99,8 +99,6 @@ const calcPrice = (items: OrderItem[]) => {
   const itemsPrice = round2(
       items.reduce((acc, item) => acc + item.price * item.qty, 0)
     ),
-    shippingPrice = round2(itemsPrice > 100 ? 0 : 100),
-    taxPrice = round2(Number(0.15 * itemsPrice)),
-    totalPrice = round2(itemsPrice + shippingPrice + taxPrice)
-  return { itemsPrice, shippingPrice, taxPrice, totalPrice }
+    totalPrice = round2(itemsPrice)
+  return { itemsPrice, totalPrice }
 }

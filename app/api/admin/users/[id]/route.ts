@@ -36,7 +36,7 @@ export const PUT = auth(async (...p: any) => {
     )
   }
 
-  const { name, email, isAdmin } = await req.json()
+  const { name, email, isAdmin, altura, peso } = await req.json()
 
   try {
     await dbConnect()
@@ -44,6 +44,8 @@ export const PUT = auth(async (...p: any) => {
     if (user) {
       user.name = name
       user.email = email
+      user.altura = altura
+      user.peso = peso
       user.isAdmin = Boolean(isAdmin)
 
       const updatedUser = await user.save()
