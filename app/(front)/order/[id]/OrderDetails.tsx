@@ -1,5 +1,5 @@
-'use client'
 import { PayPalButtons, PayPalScriptProvider } from '@paypal/react-paypal-js'
+import { useState } from 'react'; // Importa useState
 import { OrderItem } from '@/lib/models/OrderModel'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
@@ -8,13 +8,13 @@ import toast from 'react-hot-toast'
 import useSWR from 'swr'
 import useSWRMutation from 'swr/mutation'
 
-export default function OrderDetails({
-  orderId,
-  paypalClientId,
-}: {
-  orderId: string
-  paypalClientId: string
-}) {
+interface OrderDetailsProps {
+  orderId: string;
+  paypalClientId: string;
+  mercadoPagoClientId: string;
+}
+
+export default function OrderDetails({ orderId, paypalClientId, mercadoPagoClientId }: OrderDetailsProps) {
   const { trigger: deliverOrder, isMutating: isDelivering } = useSWRMutation(
     `/api/orders/${orderId}`,
     async (url) => {
@@ -57,6 +57,8 @@ export default function OrderDetails({
         toast.success('Order paid successfully')
       })
   }
+
+  const [paymentUrl, setPaymentUrl] = useState(""); // Declaración de setPaymentUrl
 
   const { data, error } = useSWR(`/api/orders/${orderId}`)
 
@@ -179,17 +181,10 @@ export default function OrderDetails({
                     </PayPalScriptProvider>
                   </li>
                 )}
-                {session?.user.isAdmin && (
+                {!isPaid && paymentMethod === 'MercadoPago' && (
                   <li>
-                    <button
-                      className="btn w-full my-2"
-                      onClick={() => deliverOrder()}
-                      disabled={isDelivering}
-                    >
-                      {isDelivering && (
-                        <span className="loading loading-spinner"></span>
-                      )}
-                      Mark as delivered
+                    <button onClick={() => setPaymentUrl('https://www.mercadopago.com.ar/checkout/v1/redirect?preference_id=${preference.preferenceId}')} className="btn w-full my-2">
+                      Pay with Mercado Pago
                     </button>
                   </li>
                 )}

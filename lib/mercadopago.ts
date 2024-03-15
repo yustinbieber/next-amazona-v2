@@ -1,54 +1,39 @@
-const base = process.env.MERCADOPAGO_API_URL || 'https://api.mercadopago.com';
+import { Request, Response } from 'express'; // Importa tu configuración de Mercado Pago
+const mercadopago = require("mercadopago");
+import Product from './models/ProductModel'; // Importa el modelo de Producto desde tu base de datos
 
-export const mercadopago = {
-  createOrder: async function createOrder(price: number) {
-    const accessToken = await generateAccessToken();
-    const url = `${base}/checkout/preferences`;
-    const response = await fetch(url, {
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${accessToken}`,
+mercadopago.configure({
+  client_id: process.env.MERCADOPAGO_CLIENT_ID,
+  client_secret: process.env.MERCADOPAGO_CLIENT_SECRET,
+});
+
+async function createMercadoPagoOrder(req: Request, res: Response): Promise<void> {
+  const orderId = req.params.id;
+
+  try {
+    // Obtener los datos del producto desde la base de datos
+    const product = await Product.findById(orderId); // Suponiendo que estás utilizando Mongoose para interactuar con MongoDB
+
+    // Lógica para crear la orden de pago en Mercado Pago
+    const preference = {
+      items: [{
+        title: product.name,
+        unit_price: product.price,
+        quantity: product.quantity,
+      }],
+      payer: {
+        email: req.body.shippingAddress.email,
       },
-      body: JSON.stringify({
-        items: [
-          {
-            unit_price: price,
-            quantity: 1,
-          },
-        ],
-      }),
-    });
-    return handleResponse(response);
-  },
-  capturePayment: async function capturePayment(orderId: string) {
-    // No es necesario capturar el pago en Mercado Pago como lo era en PayPal
-    // Ya que Mercado Pago maneja la captura automáticamente después del pago exitoso
-    return { id: orderId, status: 'captured' };
-  },
-};
+      // Otros campos opcionales como back_urls, notification_url, etc.
+    };
 
-async function generateAccessToken() {
-  const { MERCADOPAGO_CLIENT_ID, MERCADOPAGO_CLIENT_SECRET } = process.env;
-  const auth = Buffer.from(`${MERCADOPAGO_CLIENT_ID}:${MERCADOPAGO_CLIENT_SECRET}`).toString('base64');
-  const response = await fetch(`${base}/oauth/token`, {
-    method: 'post',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-      'Authorization': `Basic ${auth}`,
-    },
-    body: 'grant_type=client_credentials',
-  });
+    const response = await mercadopago.preferences.create(preference);
 
-  const jsonData = await handleResponse(response);
-  return jsonData.access_token;
-}
-
-async function handleResponse(response: any) {
-  if (response.status === 200 || response.status === 201) {
-    return response.json()
+    res.status(200).json(response);
+  } catch (error) {
+    console.error('Error al crear la orden de pago en Mercado Pago:', error);
+    res.status(500).json({ message: 'Error al crear la orden de pago en Mercado Pago' });
   }
-
-  const errorMessage = await response.text()
-  throw new Error(errorMessage)
 }
+
+export { createMercadoPagoOrder };

@@ -1,18 +1,11 @@
-import dbConnect from '@/lib/dbConnect'
-import OrderModel from '@/lib/models/OrderModel'
-import { auth } from '@/lib/auth'
+const express = require('express');
+const router = express.Router();
+const { createMercadoPagoOrder, captureMercadoPagoOrder } = require('@/lib/mercadopago');
 
-export const GET = auth(async (...request: any) => {
-  const [req, { params }] = request
-  if (!req.auth) {
-    return Response.json(
-      { message: 'unauthorized' },
-      {
-        status: 401,
-      }
-    )
-  }
-  await dbConnect()
-  const order = await OrderModel.findById(params.id)
-  return Response.json(order)
-}) as any
+// Ruta para crear una orden de pago de Mercado Pago
+router.post('/api/orders/:id/create-mercadopago-order', createMercadoPagoOrder);
+
+// Ruta para capturar un pago de Mercado Pago
+router.post('/api/orders/:id/capture-mercadopago-order', captureMercadoPagoOrder);
+
+module.exports = router;

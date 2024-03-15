@@ -11,8 +11,13 @@ const Form = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     savePaymentMethod(selectedPaymentMethod)
-    router.push('/place-order')
-  }
+    if (selectedPaymentMethod === 'Mercado pago') {
+      // Aquí debes redirigir al usuario a la página de Mercado Pago para completar el pago
+      // Puedes usar router.push() o window.location.href para hacer la redirección
+    } else {
+      router.push('/place-order');
+    }
+  };
 
   useEffect(() => {
     if (!shippingAddress.address) {
